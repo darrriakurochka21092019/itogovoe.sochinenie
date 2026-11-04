@@ -1,0 +1,14 @@
+node_modules
+.git
+.env*
+.dev.vars*
+.openai
+data
+test-data
+outputs
+.wrangler
+.vinext
+.sites-runtime
+dist
+standalone-dist
+upload

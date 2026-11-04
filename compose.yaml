@@ -1,0 +1,29 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      SETUP_TOKEN: ${SETUP_TOKEN:?Set SETUP_TOKEN in .env}
+      APP_ORIGIN: ${APP_ORIGIN:?Set APP_ORIGIN in .env}
+    volumes:
+      - workshop-data:/app/data
+    expose:
+      - '3000'
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:?Set APP_DOMAIN in .env}
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - app
+volumes:
+  workshop-data:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,10 @@
+import {build} from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwind from '@tailwindcss/postcss';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+const project=process.cwd();
+await build({configFile:false,root:path.join(project,'standalone'),publicDir:path.join(project,'public'),plugins:[react()],css:{postcss:{plugins:[tailwind()]}},build:{outDir:path.join(project,'standalone-dist/public'),emptyOutDir:true}});
+await build({configFile:false,root:project,ssr:{noExternal:['@noble/hashes']},build:{ssr:'standalone/server.ts',outDir:'standalone-dist/server',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'server.js'}}}});
+await fs.cp('drizzle','standalone-dist/drizzle',{recursive:true});
+console.log('Standalone build ready. Start: npm run start:standalone');
